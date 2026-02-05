@@ -8,6 +8,13 @@ from sklearn.model_selection import train_test_split
 
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation,DataTransformationConfig
+
+
+from src.components.model_trainer import ModelTrainer,ModelTrainerConfig
+
+
+
 #i can create folder another like config entity and then define this class 
 @dataclass #to define a class variable we use init but using this we directly use lol
 ##use dataclass when defining a variable 
@@ -37,8 +44,8 @@ class DataIngestion:
 
            train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
 
-           train_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
-           logging.info("ingestion of the data is completed")
+           test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
+        #    logging.info("ingestion of the data is completed")
 
            return(
                self.ingestion_config.train_data_path,
@@ -49,6 +56,10 @@ class DataIngestion:
 
 if __name__=="__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
 
-    
+    data_transformation=DataTransformation()
+    train_arr,test_arr,_=data_transformation.initate_data_transformation(train_data,test_data)
+
+    Modeltrainer=ModelTrainer()
+    Modeltrainer.initiate_model_trainer(train_arr,test_arr)
